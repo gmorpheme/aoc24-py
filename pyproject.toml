@@ -1,0 +1,28 @@
+[project]
+name = "aoc24"
+version = "0.1.0"
+description = "Advent of Code 2024 solutions in python"
+authors = [
+    {name = "", email = "162815+gmorpheme@users.noreply.github.com"},
+]
+dependencies = []
+requires-python = "==3.13.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+all = {call = "aoc24:all_days"}
+latest = {call = "aoc24:latest_day"}
+day = "python -m aoc24 "
+debug = "python -m aoc24 --debug "
+test = "pytest --doctest-modules aoc24"
+
+[dependency-groups]
+dev = [
+    "black>=24.10.0",
+    "pytest>=8.3.3",
+    "pyright>=1.1.389",
+]

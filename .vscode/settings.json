@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "aoc24", 
+        "--doctest-modules"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
