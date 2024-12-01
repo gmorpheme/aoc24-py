@@ -1,80 +1,46 @@
 import re
+from collections import Counter
 from aoc24 import day_data
 
-def process_line_a(line):
-    digits = list(filter(lambda c: c.isdigit(), line))
+TEST_INPUT = ['3   4', '4   3', '2   5', '1   3', '3   9', '3   3']
 
-    first = int(digits[0])
-    last = int(digits[-1])
 
-    return first * 10 + last
+def parse_line(line):
+    regex = re.compile(r'(\d+)\s+(\d+)')
+    return [int(g) for g in regex.match(line).groups()]
+
+
+def difference(left, right):
+    return abs(right - left)
 
 
 def day1a(lines):
     """
-    >>> day1a(['1abc2','pqr3stu8vwx','a1b2c3d4e5f','treb7uchet'])
-    142
+    >>> day1a(TEST_INPUT)
+    11
     """
-    return sum([process_line_a(line) for line in lines])
 
-
-digit_matcher = re.compile("one|two|three|four|five|six|seven|eight|nine|[0-9]")
-
-
-def day1b_digit_strings(line):
-    digit_matches = []
-    for i in range(0, len(line)):
-        m = digit_matcher.match(line[i:])
-        if m:
-            digit_matches.append(m.group(0))
-    return digit_matches
-
-
-def day1b_to_number(word):
-    match word:
-        case "one":
-            return 1
-        case "two":
-            return 2
-        case "three":
-            return 3
-        case "four":
-            return 4
-        case "five":
-            return 5
-        case "six":
-            return 6
-        case "seven":
-            return 7
-        case "eight":
-            return 8
-        case "nine":
-            return 9
-        case other:
-            return int(other[0])
-
-
-def process_line_b(line):
-    digits = day1b_digit_strings(line)
-
-    first = day1b_to_number(digits[0])
-    last = day1b_to_number(digits[-1])
-
-    return first * 10 + last
+    left, right = zip(*[parse_line(line) for line in lines])
+    return sum(
+        difference(left, right) for left, right in zip(sorted(left), sorted(right))
+    )
 
 
 def day1b(lines):
     """
-    >>> day1b(['two1nine','eightwothree','abcone2threexyz','xtwone3four','4nineeightseven2','zoneight234','7pqrstsixteen'])
-    281
+    >>> day1b(TEST_INPUT)
+    31
     """
-    return sum([process_line_b(line) for line in lines])
+    left, right = zip(*[parse_line(line) for line in lines])
+    counter = Counter(right)
+    return sum(value * counter.get(value, 0) for value in left)
 
 
 def main():
     lines = day_data(1).lines()
     print(f"Day 1a: {day1a(lines)}")
     print(f"Day 1b: {day1b(lines)}")
+
 
 if __name__ == "__main__":
     main()
