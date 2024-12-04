@@ -57,14 +57,14 @@ def safe_with_dampening(levels):
 
 def day2a(records):
     """
-    >>> day2a(parse_line(line) for line in TEST_INPUT.splitlines())
+    >>> day2a(parse_line(line) for line in day_data(TEST_INPUT).lines())
     2
     """
     return [safe(record) for record in records].count(True)
 
 def day2b(records):
     """
-    >>> day2b(parse_line(line) for line in TEST_INPUT.splitlines())
+    >>> day2b(parse_line(line) for line in day_data(TEST_INPUT).lines())
     4
     """
     return [safe_with_dampening(record) for record in records].count(True)

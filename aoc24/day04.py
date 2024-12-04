@@ -1,5 +1,4 @@
-from aoc24 import day_data, Grid
-from collections import deque
+from aoc24 import day_data
 
 TEST_INPUT = """MMMSXXMASM
 MSAMXMSMSA
@@ -88,7 +87,7 @@ def run_matchers(matchers, line):
 
 def day4a(grid):
     """
-    >>> day4a(Grid(TEST_INPUT.splitlines()))
+    >>> day4a(day_data(TEST_INPUT).grid())
     18
     """
     cc = CrissCross(grid)
@@ -116,7 +115,7 @@ def is_mas_cross(grid, pos):
 
 def day4b(grid):
     """
-    >>> day4b(Grid(TEST_INPUT.splitlines()))
+    >>> day4b(day_data(TEST_INPUT).grid())
     9
     """
     count = 0

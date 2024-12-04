@@ -4,6 +4,7 @@ import datetime
 import re
 from dataclasses import dataclass
 from typing import NamedTuple
+from functools import cached_property
 
 def day(n):
     title = f'Day {n}'
@@ -49,6 +50,10 @@ class Pos(NamedTuple):
 
 class Grid:
 
+    """
+    A simple grid represented as rows, starting with y=0.
+    """
+
     def __init__(self, rows):
         self.rows = rows
 
@@ -62,13 +67,34 @@ class Grid:
             case (x, y):
                 self.rows[y][x] = value
 
-    @property
+    @cached_property
     def height(self):
         return len(self.rows)
 
-    @property
+    @cached_property
     def width(self):
         return len(self.rows[0])
+
+@dataclass
+class TestData:
+    text_data: str
+
+    def lines(self):
+        return self.text_data.splitlines()
+
+    def dicts(self, regex):
+        r = re.compile(regex)
+        return [r.match(line).groupdict() for line in self.lines()]
+
+    def tuples(self, regex):
+        r = re.compile(regex)
+        return [tuple(r.match(line).groups()[1:]) for line in self.lines()]
+
+    def text(self):
+        return self.text_data
+
+    def grid(self, item_transform = lambda x: x):
+        return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
 
 @dataclass
 class DayData:
@@ -98,4 +124,7 @@ class DayData:
         return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
 
 def day_data(n):
-    return DayData(n)
+    if type(n) is str:
+        return TestData(n)
+    else:
+        return DayData(n)
