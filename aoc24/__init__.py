@@ -62,6 +62,14 @@ class Grid:
             case (x, y):
                 self.rows[y][x] = value
 
+    @property
+    def height(self):
+        return len(self.rows)
+
+    @property
+    def width(self):
+        return len(self.rows[0])
+
 @dataclass
 class DayData:
     day: int
@@ -87,7 +95,7 @@ class DayData:
         return self.file().read()
 
     def grid(self, item_transform = lambda x: x):
-        return [list(item_transform(c) for c in line.strip()) for line in self.lines()]
+        return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
 
 def day_data(n):
     return DayData(n)
