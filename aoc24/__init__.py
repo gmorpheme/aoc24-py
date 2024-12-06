@@ -48,6 +48,9 @@ class Pos(NamedTuple):
     x: int
     y: int
 
+    def offset(self, direction):
+        return Pos(self.x + direction[0], self.y + direction[1])
+
 class Grid:
 
     """
@@ -66,6 +69,14 @@ class Grid:
         match locator:
             case (x, y):
                 self.rows[y][x] = value
+
+
+    def bound(self, pos):
+        if 0 <= pos.x < self.width and 0 <= pos.y < self.height:
+            return pos
+
+    def find(self, item):
+        return {Pos(x, y) for y in range(self.height) for x in range(self.width) if self[(x, y)] == item}
 
     @cached_property
     def height(self):
