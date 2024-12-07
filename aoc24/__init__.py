@@ -99,7 +99,7 @@ class TestData:
 
     def tuples(self, regex):
         r = re.compile(regex)
-        return [tuple(r.match(line).groups()[1:]) for line in self.lines()]
+        return [tuple(r.match(line).groups()) for line in self.lines()]
 
     def text(self):
         return self.text_data
@@ -123,7 +123,7 @@ class DayData:
 
     def tuples(self, regex):
         r = re.compile(regex)
-        return [tuple(r.match(line).groups()[1:]) for line in open(self.filename())]
+        return [tuple(r.match(line).groups()) for line in open(self.filename())]
 
     def file(self):
         return open(self.filename())
