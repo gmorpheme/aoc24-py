@@ -3,8 +3,9 @@ import pathlib
 import datetime
 import re
 from dataclasses import dataclass
-from typing import NamedTuple
+from typing import NamedTuple, Iterator
 from functools import cached_property
+from itertools import takewhile, repeat
 
 def day(n):
     title = f'Day {n}'
@@ -44,12 +45,12 @@ def all_days():
         else:
             module.main()
 
-class Pos(NamedTuple):
+class Vec(NamedTuple):
     x: int
     y: int
 
     def offset(self, direction):
-        return Pos(self.x + direction[0], self.y + direction[1])
+        return Vec(self.x + direction[0], self.y + direction[1])
 
 class Grid:
 
@@ -76,7 +77,7 @@ class Grid:
             return pos
 
     def find(self, item):
-        return {Pos(x, y) for y in range(self.height) for x in range(self.width) if self[(x, y)] == item}
+        return {Vec(x, y) for y in range(self.height) for x in range(self.width) if self[(x, y)] == item}
 
     @cached_property
     def height(self):
@@ -86,29 +87,58 @@ class Grid:
     def width(self):
         return len(self.rows[0])
 
-@dataclass
-class TestData:
-    text_data: str
+class DayData:
 
-    def lines(self):
-        return self.text_data.splitlines()
+    def __init__(self, line_iter):
+        self.line_iter = line_iter
 
     def dicts(self, regex):
         r = re.compile(regex)
         return [r.match(line).groupdict() for line in self.lines()]
 
-    def tuples(self, regex):
-        r = re.compile(regex)
-        return [tuple(r.match(line).groups()) for line in self.lines()]
+    def tuples(self, regex, xforms):
+        return [tuple(map(lambda f, x: f(x), xforms, re.match(regex, line).groups())) for line in self.lines()]
 
-    def text(self):
-        return self.text_data.strip()
+    def sequences(self, xform, sep = None):
+        if sep:
+            return [list(map(xform, line.split(sep))) for line in self.lines()]
+        else:
+            return [[xform(x) for x in line.split()] for line in self.lines()]
+
+    def labelled_sequences(self, label_xform, item_xform, sep = None, seq_sep = None):
+        for line in self.lines():
+            head, tail = line.split(sep)
+            items = tail.split(seq_sep)
+            yield label_xform(head), [item_xform(x) for x in items]
 
     def grid(self, item_transform = lambda x: x):
         return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
 
+    def split(self):
+        after = iter(self.lines())
+        before = takewhile(lambda x: x.strip(), after)
+        return LinesData(before), LinesData(after)
+
 @dataclass
-class DayData:
+class TestData(DayData):
+    text_data: str
+
+    def lines(self):
+        return self.text_data.splitlines()
+
+    def text(self):
+        return self.text_data.strip()
+
+@dataclass
+class LinesData(DayData):
+
+    lineiter: Iterator[str]
+
+    def lines(self):
+        yield from self.lineiter
+
+@dataclass
+class DayTextFileInput(DayData):
     day: int
 
     def filename(self):
@@ -117,25 +147,14 @@ class DayData:
     def lines(self):
         return list(open(self.filename()))
 
-    def dicts(self, regex):
-        r = re.compile(regex)
-        return [r.match(line).groupdict() for line in open(self.filename())]
-
-    def tuples(self, regex):
-        r = re.compile(regex)
-        return [tuple(r.match(line).groups()) for line in open(self.filename())]
-
     def file(self):
         return open(self.filename())
 
     def text(self):
         return self.file().read().strip()
 
-    def grid(self, item_transform = lambda x: x):
-        return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
-
 def day_data(n):
     if type(n) is str:
         return TestData(n)
     else:
-        return DayData(n)
+        return DayTextFileInput(n)

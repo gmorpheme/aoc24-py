@@ -14,14 +14,9 @@ TEST_INPUT = """190: 10 19
 21037: 9 7 18 13
 292: 11 6 16 20"""
 
-REGEX = re.compile(r'(\d+):\s+(.*)')
 
-
-def parse_line(line):
-    val, operands = REGEX.match(line).groups()
-    result = int(val)
-    operands = [int(x) for x in operands.split()]
-    return result, operands
+def parse_checks(data_source):
+    return day_data(data_source).labelled_sequences(int, int, ":")
 
 
 def check_line(result, operands, operators=(operator.mul, operator.add)):
@@ -55,21 +50,19 @@ def concatenate(lhs, rhs):
     return lhs * (10 ** math.floor(1 + math.log10(rhs))) + rhs
 
 
-def day7a(lines):
+def day7a(checks):
     """
-    >>> day7a(day_data(TEST_INPUT).lines())
+    >>> day7a(parse(TEST_INPUT))
     3749
     """
-    checks = [parse_line(line) for line in lines]
     return sum(result for result, operands in checks if check_line(result, operands))
 
 
-def day7b(lines):
+def day7b(checks):
     """
-    >>> day7b(day_data(TEST_INPUT).lines())
+    >>> day7b(parse(TEST_INPUT))
     11387
     """
-    checks = [parse_line(line) for line in lines]
     return sum(
         result
         for result, operands in checks
@@ -78,9 +71,9 @@ def day7b(lines):
 
 
 def main():
-    lines = day_data(7).lines()
-    print(f"Day 7a: {day7a(lines)}")
-    print(f"Day 7b: {day7b(lines)}")
+    checks = parse_checks(7)
+    print(f"Day 7a: {day7a(checks)}")
+    print(f"Day 7b: {day7b(checks)}")
 
 
 if __name__ == "__main__":

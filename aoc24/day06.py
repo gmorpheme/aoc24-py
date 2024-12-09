@@ -1,4 +1,4 @@
-from aoc24 import day_data, Pos
+from aoc24 import day_data, Vec
 
 TEST_INPUT = """....#.....
 .........#

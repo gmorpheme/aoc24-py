@@ -1,4 +1,4 @@
-from aoc24 import day_data, Pos
+from aoc24 import day_data, Vec
 from collections import defaultdict
 from itertools import combinations
 
@@ -17,18 +17,18 @@ TEST_INPUT = """............
 
 
 def compute_antinodes(pos_a, pos_b):
-    antinode_a = Pos(
+    antinode_a = Vec(
         pos_b.x - 2 * (pos_b.x - pos_a.x), pos_b.y - 2 * (pos_b.y - pos_a.y)
     )
-    antinode_b = Pos(
+    antinode_b = Vec(
         pos_a.x + 2 * (pos_b.x - pos_a.x), pos_a.y + 2 * (pos_b.y - pos_a.y)
     )
     return set((antinode_a, antinode_b))
 
 
 def compute_antinodes_b(pos_a, pos_b, grid):
-    diff = Pos(pos_b.x - pos_a.x, pos_b.y - pos_a.y)
-    ndiff = Pos(pos_a.x - pos_b.x, pos_a.y - pos_b.y)
+    diff = Vec(pos_b.x - pos_a.x, pos_b.y - pos_a.y)
+    ndiff = Vec(pos_a.x - pos_b.x, pos_a.y - pos_b.y)
 
     def priors():
         pos = pos_a
@@ -51,7 +51,7 @@ def parse_antennae(grid):
         for x in range(grid.width):
             c = grid[(x, y)]
             if c != '.':
-                antennae[c].add(Pos(x, y))
+                antennae[c].add(Vec(x, y))
 
     return antennae
 

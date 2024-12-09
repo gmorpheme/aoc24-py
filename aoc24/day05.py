@@ -32,22 +32,20 @@ TEST_INPUT = """47|53
 61,13,29
 97,13,75,29,47"""
 
-def parse(lines):
-    iterator = iter(lines)
-    line = next(iterator)
+
+def parse(data_source):
+    dep_data, manual_data = day_data(data_source).split()
 
     deps = defaultdict(set)
-
-    while m := re.match(r"(\d+)\|(\d+)", line.strip()):
-        k, v = map(int, m.groups())
+    for k, v in dep_data.tuples(r"(\d+)\|(\d+)", (int, int)):
         deps[v].add(k)
-        line = next(iterator)
 
     manuals = []
-    for line in iterator:
-        manuals.append(list(map(int, line.split(","))))
+    for seq in manual_data.sequences(int, sep=","):
+        manuals.append(seq)
 
     return deps, manuals
+
 
 def check_manual(deps, pages):
     relevant_pages = set(pages)
@@ -59,6 +57,7 @@ def check_manual(deps, pages):
         met.add(p)
     return pages[len(pages) // 2]
 
+
 def corrected_middle(deps, pages):
     needed = set(pages)
     deps = {k: v & needed for k, v in deps.items() if k in needed}
@@ -66,27 +65,29 @@ def corrected_middle(deps, pages):
     corrected = list(ts.static_order())
     return corrected[len(corrected) // 2]
 
-def day5a(lines):
+
+def day5a(deps, manuals):
     """
-    >>> day5a(day_data(TEST_INPUT).lines())
+    >>> day5a(*parse(TEST_INPUT))
     143
     """
-    deps, manuals = parse(lines)
     return sum(check_manual(deps, m) for m in manuals)
 
-def day5b(lines):
+
+def day5b(deps, manuals):
     """
-    >>> day5b(day_data(TEST_INPUT).lines())
+    >>> day5b(*parse(TEST_INPUT))
     123
     """
-    deps, manuals = parse(lines)
-    bad_manuals = [m for m in manuals if not(check_manual(deps, m))]
+    bad_manuals = [m for m in manuals if not (check_manual(deps, m))]
     return sum(corrected_middle(deps, m) for m in bad_manuals)
 
+
 def main():
-    lines = day_data(5).lines()
-    print(f"Day 5a: {day5a(lines)}")
-    print(f"Day 5b: {day5b(lines)}")
+    deps, manuals = parse(5)
+    print(f"Day 5a: {day5a(deps, manuals)}")
+    print(f"Day 5b: {day5b(deps, manuals)}")
+
 
 if __name__ == "__main__":
     main()
