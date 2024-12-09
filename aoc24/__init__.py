@@ -102,7 +102,7 @@ class TestData:
         return [tuple(r.match(line).groups()) for line in self.lines()]
 
     def text(self):
-        return self.text_data
+        return self.text_data.strip()
 
     def grid(self, item_transform = lambda x: x):
         return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
@@ -129,7 +129,7 @@ class DayData:
         return open(self.filename())
 
     def text(self):
-        return self.file().read()
+        return self.file().read().strip()
 
     def grid(self, item_transform = lambda x: x):
         return Grid([list(item_transform(c) for c in line.strip()) for line in self.lines()])
