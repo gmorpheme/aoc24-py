@@ -52,7 +52,7 @@ def concatenate(lhs, rhs):
 
 def day7a(checks):
     """
-    >>> day7a(parse(TEST_INPUT))
+    >>> day7a(parse_checks(TEST_INPUT))
     3749
     """
     return sum(result for result, operands in checks if check_line(result, operands))
@@ -60,7 +60,7 @@ def day7a(checks):
 
 def day7b(checks):
     """
-    >>> day7b(parse(TEST_INPUT))
+    >>> day7b(parse_checks(TEST_INPUT))
     11387
     """
     return sum(

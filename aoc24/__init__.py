@@ -49,6 +49,12 @@ class Vec(NamedTuple):
     x: int
     y: int
 
+    def __add__(self, other):
+        return Vec(self.x + other[0], self.y + other[1])
+
+    def __sub__(self, other):
+        return Vec(self.x - other[0], self.y - other[1])
+
     def offset(self, direction):
         return Vec(self.x + direction[0], self.y + direction[1])
 

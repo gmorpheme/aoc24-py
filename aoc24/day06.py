@@ -25,7 +25,7 @@ def rotate(direction):
 def compute_paths(grid, pos, direction, obstacles):
     paths = [pos]
     path_set = set(paths)
-    while check := grid.bound(pos.offset(direction)):
+    while check := grid.bound(pos + direction):
         if check in obstacles:
             direction = rotate(direction)
         else:

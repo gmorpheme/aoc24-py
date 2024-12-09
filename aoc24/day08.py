@@ -27,20 +27,19 @@ def compute_antinodes(pos_a, pos_b):
 
 
 def compute_antinodes_b(pos_a, pos_b, grid):
-    diff = Vec(pos_b.x - pos_a.x, pos_b.y - pos_a.y)
-    ndiff = Vec(pos_a.x - pos_b.x, pos_a.y - pos_b.y)
+    diff = pos_b - pos_a
 
     def priors():
         pos = pos_a
         while grid.bound(pos):
             yield pos
-            pos = pos.offset(ndiff)
+            pos -= diff
 
     def subsequents():
         pos = pos_b
         while grid.bound(pos):
             yield pos
-            pos = pos.offset(diff)
+            pos += diff
 
     return set(priors()) | set(subsequents())
 
