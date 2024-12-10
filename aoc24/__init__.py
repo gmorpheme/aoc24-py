@@ -82,6 +82,11 @@ class Grid:
         if 0 <= pos.x < self.width and 0 <= pos.y < self.height:
             return pos
 
+    def neighbours(self, pos):
+        for d in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
+            if n := self.bound(pos +  d):
+                yield n
+
     def find(self, item):
         return {Vec(x, y) for y in range(self.height) for x in range(self.width) if self[(x, y)] == item}
 
