@@ -1,6 +1,5 @@
-from aoc24 import day_data, Vec
+from aoc24 import day_data
 from collections import defaultdict
-from itertools import combinations
 
 TEST_INPUT = """89010123
 78121874
