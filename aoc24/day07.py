@@ -16,7 +16,7 @@ TEST_INPUT = """190: 10 19
 
 
 def parse_checks(data_source):
-    return day_data(data_source).labelled_sequences(int, int, ":")
+    return list(day_data(data_source).labelled_sequences(int, int, ":"))
 
 
 def check_line(result, operands, operators=(operator.mul, operator.add)):
