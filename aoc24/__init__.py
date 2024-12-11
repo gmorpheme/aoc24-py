@@ -110,6 +110,12 @@ class DayData:
     def tuples(self, regex, xforms):
         return [tuple(map(lambda f, x: f(x), xforms, re.match(regex, line).groups())) for line in self.lines()]
 
+    def sequence(self, xform, sep = None):
+        if sep:
+            return list(map(xform, self.text().split(sep)))
+        else:
+            return [xform(x) for x in self.text().split()]
+
     def sequences(self, xform, sep = None):
         if sep:
             return [list(map(xform, line.split(sep))) for line in self.lines()]
@@ -147,6 +153,9 @@ class LinesData(DayData):
 
     def lines(self):
         yield from self.lineiter
+
+    def text(self):
+        return next(self.lineiter).strip()
 
 @dataclass
 class DayTextFileInput(DayData):
