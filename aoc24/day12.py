@@ -1,6 +1,5 @@
 from aoc24 import Vec, day_data
 from itertools import groupby, pairwise
-from dataclasses import dataclass
 from operator import xor
 
 TEST_INPUT = """RRRRIICCFF

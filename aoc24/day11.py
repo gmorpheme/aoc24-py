@@ -1,5 +1,4 @@
 from aoc24 import day_data
-import math
 from functools import cache
 
 TEST_INPUT = """125 17"""

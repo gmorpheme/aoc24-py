@@ -5,7 +5,8 @@ import re
 from dataclasses import dataclass
 from typing import NamedTuple, Iterator
 from functools import cached_property
-from itertools import takewhile, repeat
+from itertools import takewhile
+from fractions import Fraction
 
 def day(n):
     title = f'Day {n}'
@@ -54,6 +55,12 @@ class Vec(NamedTuple):
 
     def __sub__(self, other):
         return Vec(self.x - other[0], self.y - other[1])
+
+    def __truediv__(self, scalar):
+        return Vec(Fraction(self.x, scalar), Fraction(self.y, scalar))
+
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y
 
     def offset(self, direction):
         return Vec(self.x + direction[0], self.y + direction[1])
