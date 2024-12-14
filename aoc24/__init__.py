@@ -59,6 +59,12 @@ class Vec(NamedTuple):
     def __truediv__(self, scalar):
         return Vec(Fraction(self.x, scalar), Fraction(self.y, scalar))
 
+    def __mod__(self, other):
+        return Vec(self.x % other[0], self.y % other[1])
+
+    def __mul__(self, scalar):
+        return Vec(self.x * scalar, self.y * scalar)
+
     def dot(self, other):
         return self.x * other.x + self.y * other.y
 
