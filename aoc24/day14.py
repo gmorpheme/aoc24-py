@@ -23,16 +23,6 @@ def parse(data_source):
         yield Vec(x, y), Vec(vx, vy)
 
 
-def dump(positions, bounds):
-    for y in range(bounds.y):
-        for x in range(bounds.x):
-            if Vec(x, y) in positions:
-                print("#", end="")
-            else:
-                print(".", end="")
-        print()
-
-
 def evolve(p, v, n, bounds):
     """
     >>> evolve(Vec(2, 4), Vec(2, -3), 1, Vec(11, 7))
