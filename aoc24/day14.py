@@ -1,7 +1,6 @@
 from aoc24 import day_data, Vec
 from functools import reduce
 import operator
-from collections import defaultdict
 
 TEST_INPUT = """p=0,4 v=3,-3
 p=6,3 v=-1,-3
@@ -58,27 +57,6 @@ def quadrant_counts(positions, bounds):
             elif p.y >= bounds.y // 2 + 1:
                 br += 1
     return tl, tr, bl, br
-
-
-def check_symmetry(positions, bounds):
-    """
-    >>> check_symmetry([Vec(1, 1), Vec(2, 2), Vec(3, 3)], Vec(4, 4))
-    False
-    >>> check_symmetry([Vec(1, 1), Vec(2, 1)], Vec(4, 4))
-    True
-    >>> check_symmetry([Vec(1, 1), Vec(2, 1), Vec(1, 1), Vec(2, 1)], Vec(4, 4))
-    True
-    >>> check_symmetry([Vec(1, 1), Vec(2, 1), Vec(2, 1)], Vec(4, 4))
-    False
-    """
-    unmatched = defaultdict(lambda: 0)
-    for p in positions:
-        reflection = Vec(bounds.x - p.x - 1, p.y)
-        if unmatched[reflection] == 0:
-            unmatched[p] += 1
-        else:
-            unmatched[reflection] -= 1
-    return sum(unmatched.values()) == 0
 
 
 def sociability(positions, bounds):
