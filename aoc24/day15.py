@@ -235,7 +235,9 @@ def day15a(plan, movements):
 
 def day15b(plan, movements):
     """
-    >>> day15b(*parse(TEST_INPUT_B))
+    >>> plan, movements = parse(TEST_INPUT_B)
+    >>> plan_b = plan.to_plan_b()
+    >>> day15b(plan_b, movements)
     9021
     """
     for m in movements:
