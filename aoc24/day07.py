@@ -1,5 +1,4 @@
 from aoc24 import day_data
-import re
 import operator
 import math
 from collections import deque

@@ -103,6 +103,11 @@ class Grid:
     def find(self, item):
         return {Vec(x, y) for y in range(self.height) for x in range(self.width) if self[(x, y)] == item}
 
+    def dump(self):
+        for row in self.rows:
+            print(''.join(row))
+        print()
+
     @cached_property
     def height(self):
         return len(self.rows)
@@ -168,7 +173,7 @@ class LinesData(DayData):
         yield from self.lineiter
 
     def text(self):
-        return next(self.lineiter).strip()
+        return "".join(self.lineiter).strip()
 
 @dataclass
 class DayTextFileInput(DayData):
