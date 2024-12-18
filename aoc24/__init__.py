@@ -38,13 +38,9 @@ def latest_day():
 
 def all_days():
     print('All days')
-    for n in range(0, 26):
-        try:
-            module = importlib.import_module(f'aoc24.day{n:02}')
-        except Exception:
-            pass
-        else:
-            module.main()
+    for n in range(26):
+        if pathlib.Path(f'aoc24/day{n:02}.py').exists():
+            day(n)
 
 class Vec(NamedTuple):
     x: int
@@ -70,6 +66,32 @@ class Vec(NamedTuple):
 
     def offset(self, direction):
         return Vec(self.x + direction[0], self.y + direction[1])
+
+class Vec3(NamedTuple):
+    x: int
+    y: int
+    z: int
+
+    def __add__(self, other):
+        return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other):
+        return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __truediv__(self, scalar):
+        return Vec3(Fraction(self.x, scalar), Fraction(self.y, scalar), Fraction(self.z, scalar))
+
+    def __mod__(self, other):
+        return Vec3(self.x % other.x, self.y % other.y, self.z % other.z)
+
+    def __mul__(self, scalar):
+        return Vec3(self.x * scalar, self.y * scalar, self.z * scalar)
+
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y + self.z * other.z
+
+    def offset(self, direction):
+        return Vec3(self.x + direction.x, self.y + direction.y, self.z + direction.z)
 
 class Grid:
 

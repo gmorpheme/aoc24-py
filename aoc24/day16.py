@@ -93,13 +93,8 @@ def turns(state, target):
 
     orientation = state.orientation
     target_bearing = bearing(state.position, target)
-
-    target_bearing &= {orientation}
-
-    if orientation.inverse() in target_bearing:
-        return 2
-    else:
-        return len(target_bearing)
+    target_bearing.discard(orientation)
+    return len(target_bearing)
 
 
 @dataclass
@@ -151,7 +146,11 @@ class Puzzle:
 def a_star(puzzle):
 
     def heuristic(state):
-        return manhattan(state.position, puzzle.end) + turns(state, puzzle.end) * 1000
+        return manhattan(
+            state.position, puzzle.end
+        )  # + turns(state, puzzle.end) * 1000
+
+    # turns out ignoring turns works better !?
 
     # heuristic, path
     start_state = puzzle.start_state()
