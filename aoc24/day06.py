@@ -1,4 +1,5 @@
 from aoc24 import day_data, Vec
+from collections import defaultdict
 
 TEST_INPUT = """....#.....
 .........#
@@ -22,22 +23,20 @@ def rotate(direction):
     return (int(c.real), int(c.imag))
 
 
-def compute_paths(grid, pos, direction, obstacles):
-    paths = [pos]
-    path_set = set(paths)
+def compute_path(grid, pos, direction, obstacles):
+    path = [pos]
+    path_dict = defaultdict(set)
     while check := grid.bound(pos + direction):
         if check in obstacles:
             direction = rotate(direction)
         else:
-            if check in path_set:
-                i = paths.index(check)
-                if i > 0 and paths[i - 1] == pos:
-                    raise CycleException(f"Cycle detected at {i}: {pos} -> {check}")
+            if check in path_dict[pos]:
+                raise CycleException(f"Cycle detected at {pos} -> {check}")
+            path_dict[pos].add(check)
+            path.append(check)
             pos = check
-            paths.append(pos)
-            path_set.add(pos)
 
-    return paths
+    return path
 
 
 def day6a(grid):
@@ -45,7 +44,7 @@ def day6a(grid):
     >>> day6a(day_data(TEST_INPUT).grid())
     41
     """
-    return len(set(compute_paths(grid, grid.find('^').pop(), (0, -1), grid.find('#'))))
+    return len(set(compute_path(grid, grid.find('^').pop(), (0, -1), grid.find('#'))))
 
 
 def day6b(grid):
@@ -55,13 +54,13 @@ def day6b(grid):
     """
     obstacles = grid.find('#')
     start = grid.find('^').pop()
-    path = compute_paths(grid, start, (0, -1), obstacles)
+    path = compute_path(grid, start, (0, -1), obstacles)
 
     obstructions = set()
     for next in path[1:]:
         if next not in obstacles:
             try:
-                compute_paths(grid, start, (0, -1), obstacles | {next})
+                compute_path(grid, start, (0, -1), obstacles | {next})
             except CycleException:
                 obstructions.add(next)
 
