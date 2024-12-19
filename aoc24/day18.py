@@ -104,7 +104,7 @@ def parse(data_source):
 
 def day18a(grid, challenge):
     """
-    >>> challenge = Challenge1(Vec(0, 0), Vec(6, 6), 12)
+    >>> challenge = Challenge(Vec(0, 0), Vec(6, 6), 12)
     >>> day18a(SparseGrid(parse(TEST_INPUT), Vec(6, 6)), challenge)
     22
     """
@@ -114,7 +114,7 @@ def day18a(grid, challenge):
 
 def day18b(grid, challenge):
     """
-    >>> challenge = Challenge1(Vec(0, 0), Vec(6, 6), 12)
+    >>> challenge = Challenge(Vec(0, 0), Vec(6, 6), 12)
     >>> day18b(SparseGrid(parse(TEST_INPUT), Vec(6, 6)), challenge)
     Vec(x=6, y=1)
     """

@@ -150,11 +150,17 @@ class DayData:
     def tuples(self, regex, xforms):
         return [tuple(map(lambda f, x: f(x), xforms, re.match(regex, line).groups())) for line in self.lines()]
 
-    def sequence(self, xform, sep = None):
+    def sequence(self, xform = None, sep = None):
         if sep:
-            return list(map(xform, self.text().split(sep)))
+            if xform:
+                return list(map(xform, self.text().split(sep)))
+            else:
+                return list(self.text().split(sep))
         else:
-            return [xform(x) for x in self.text().split()]
+            if xform:
+                return [xform(x) for x in self.text().split()]
+            else:
+                return self.text().split()
 
     def sequences(self, xform, sep = None):
         if sep:
