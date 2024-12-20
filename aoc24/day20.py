@@ -26,7 +26,6 @@ CARDINALS = [Vec(0, 1), Vec(1, 0), Vec(0, -1), Vec(-1, 0)]
 
 
 def find_path(grid):
-    grid.dump()
     start = grid.find('S').pop()
     end = grid.find('E').pop()
 
@@ -42,9 +41,6 @@ def find_path(grid):
 
 
 def day20a(grid):
-    """
-    >>> day20a(parse(TEST_INPUT))
-    """
     path = find_path(grid)
     indices = {v: i for i, v in enumerate(path)}
     teleports = {c + d for c in CARDINALS for d in CARDINALS} - {Vec(0, 0)}
@@ -55,13 +51,8 @@ def day20a(grid):
             if (r := indices.get(pos + v)) and r > i:
                 cheats[(pos, pos + v)] = r - i - 2
 
-    print(
-        sum(
-            1
-            for c in takewhile(
-                lambda x: x >= 100, sorted(cheats.values(), reverse=True)
-            )
-        )
+    return sum(
+        1 for c in takewhile(lambda x: x >= 100, sorted(cheats.values(), reverse=True))
     )
 
 
@@ -70,9 +61,6 @@ def manhattan(a, b):
 
 
 def day20b(grid):
-    """
-    >>> day20b(parse(TEST_INPUT))
-    """
     path = find_path(grid)
 
     def teleportable(a, b):
